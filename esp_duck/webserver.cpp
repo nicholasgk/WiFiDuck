@@ -39,7 +39,7 @@ namespace webserver {
     DNSServer dnsServer;
 
     bool reboot = false;
-    IPAddress apIP(192, 168, 4, 1);
+    IPAddress apIP(10, 168, 50, 101);
 
     void wsEvent(AsyncWebSocket* server, AsyncWebSocketClient* client, AwsEventType type, void* arg, uint8_t* data, size_t len) {
         if (type == WS_EVT_CONNECT) {
