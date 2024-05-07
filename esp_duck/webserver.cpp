@@ -79,14 +79,29 @@ namespace webserver {
 
     // ===== PUBLIC ===== //
     void begin() {
-        // Access Point
-        WiFi.hostname(HOSTNAME);
 
-        // WiFi.mode(WIFI_AP_STA);
-        WiFi.softAP(settings::getSSID(), settings::getPassword(), settings::getChannelNum());
-        WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
-        debugf("Started Access Point \"%s\":\"%s\"\n", settings::getSSID(), settings::getPassword());
-
+        if (settings::getSSID() == "wifiduck") {
+           // Access Point
+           WiFi.hostname(HOSTNAME);
+   
+           // WiFi.mode(WIFI_AP_STA);
+           WiFi.softAP(settings::getSSID(), settings::getPassword(), settings::getChannelNum());
+           WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+           debugf("Started Access Point \"%s\":\"%s\"\n", settings::getSSID(), settings::getPassword());
+        }
+        else {
+           
+           WiFi.begin(settings::getSSID(), settings::getPassword());
+         
+           debugf("Connecting to \"%s\"",settings::getSSID());
+           while (WiFi.status() != WL_CONNECTED)
+           {
+             delay(500);
+             debugf(".");
+           }
+        
+           debugf("Connected as \"%s\"",WiFi.localIP());
+        }
         // Webserver
         server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
             request->redirect("/index.html");
